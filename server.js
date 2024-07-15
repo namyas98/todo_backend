@@ -1,11 +1,21 @@
-const express = require('express')
-const app = express()
-const path = require('path')
-const PORT = process.env.PORT || 4000
+const express =require('express');
+const path = require('path');
+const {logger} = require('./middleware/logging')
+const errorResponse =  require('./middleware/errorResponse')
+const cors = require('cors')
+const PORT = process.env.PORT || 4000;
+const app = express();
 
-app.use('/', express.static(path.join(__dirname, 'public')))
+app.use(logger);
 
-app.use('/', require('./routes/root'))
+app.use(cors())
 
+app.use(express.json());
 
-app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))
+app.use('/', express.static(path.join(__dirname, 'public')));
+
+app.use('/', require('./routes/root'));
+
+app.use(errorResponse);
+
+app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
