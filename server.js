@@ -1,14 +1,15 @@
 const express =require('express');
 const path = require('path');
 const {logger} = require('./middleware/logging')
-const errorResponse =  require('./middleware/errorResponse')
-const cors = require('cors')
+const errorResponse =  require('./middleware/errorResponse');
+const cors = require('cors');
+const configCors = require('./config/configCors')
 const PORT = process.env.PORT || 4000;
 const app = express();
 
 app.use(logger);
 
-app.use(cors())
+app.use(cors(configCors));
 
 app.use(express.json());
 
