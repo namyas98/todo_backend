@@ -24,7 +24,7 @@ const loggingEvent = async (msg, fileName) => {
 // Logger function to log requests
 const logger =  (req,res, next) => {
     if(req.method ==='POST' || req.method === 'DELETE'){
-        loggingEvent(`${req.method},${req.url},${req.headers.origin}`, 'requests.log');
+        loggingEvent(`${req.body},${req.method},${req.url},${req.headers.origin}`, 'requests.log');
     }
     next();
 };

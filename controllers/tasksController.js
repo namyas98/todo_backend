@@ -58,14 +58,13 @@ const createNewTask = asyncHandler(async (req, res) => {
 //@route PATCH /Tasks
 //@access Public
 const updateTask = asyncHandler(async (req, res) => {
-    const {id, taskname, completed, priority, tags, duedate} = req.body
-
+    const {_id, taskname, completed, priority, tags, duedate} = req.body
     //check data validity
-    if(!id || !taskname || !Array.isArray(tags) || !duedate || !priority?.length) {
+    if(!_id || !taskname || !Array.isArray(tags) || !duedate || !priority?.length) {
         return res.status(400).json({message: 'Data validity mismatch'})
     }
 
-    const task = await Tasks.findById(id).exec();
+    const task = await Tasks.findById(_id).exec();
 
     if(!task) {
         return res.status(400).json('Task not found');
@@ -73,8 +72,8 @@ const updateTask = asyncHandler(async (req, res) => {
 
     //Check for duplicate taskname
     const duplicate = await Tasks.findOne({taskname}).lean().exec();
-
-    if(duplicate && duplicate?.id?.toString !== id) {
+    
+    if(duplicate && duplicate?._id?.toString() !== _id) {
         return res.status(409).json({message: 'This task name already exists'})
     }
 
@@ -96,7 +95,6 @@ const updateTask = asyncHandler(async (req, res) => {
 //@route DELETE /Tasks
 //@access Public
 const deleteTask = asyncHandler(async (req, res) => {
-    const {id} = req.body
     
     if(!id) {
         return res.status(400).json({message: 'Task ID is required to delete task'})
