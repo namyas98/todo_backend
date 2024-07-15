@@ -9,11 +9,19 @@ const tasksSchema = new mongoose.Schema({
         default : false
     },
     priority : {
-        type: String
+        type: String,
+        default: 'low'
     },
     tags: [{
         type: String,
-    }]
+        default: []
+    }],
+    duedate : {
+        type: Date,
+        default: new Date(0)
+    }
+
+
 },
 {
     timestamps : true
