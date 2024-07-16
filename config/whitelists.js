@@ -1,5 +1,5 @@
 const whitelists = [
-    'http://localhost:3000'
+    'https://todo-list-unx7.onrender.com'
 ];
 
 module.exports = whitelists;

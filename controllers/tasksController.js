@@ -20,6 +20,7 @@ const getAllTasks = asyncHandler(async (req, res) => {
 //@route POST /Tasks
 //@access Public
 const createNewTask = asyncHandler(async (req, res) => {
+    console.log('created')
     const {taskname, priority, tags, duedate} = req.body;
 
     //confirm taskname is provided
@@ -72,7 +73,7 @@ const updateTask = asyncHandler(async (req, res) => {
 
     //Check for duplicate taskname
     const duplicate = await Tasks.findOne({taskname}).lean().exec();
-    
+
     if(duplicate && duplicate?._id?.toString() !== _id) {
         return res.status(409).json({message: 'This task name already exists'})
     }
@@ -95,12 +96,12 @@ const updateTask = asyncHandler(async (req, res) => {
 //@route DELETE /Tasks
 //@access Public
 const deleteTask = asyncHandler(async (req, res) => {
-    
-    if(!id) {
+    const {_id} = req.body
+    if(!_id) {
         return res.status(400).json({message: 'Task ID is required to delete task'})
     };
 
-    const task = await Tasks.findById(id).exec();
+    const task = await Tasks.findById(_id).exec();
 
     if(!task){
         return res.status(400).json({message: 'Task not found'})
@@ -108,7 +109,7 @@ const deleteTask = asyncHandler(async (req, res) => {
 
     const result = await task.deleteOne()
 
-    const response = `Task with ID ${id} deleted`
+    const response = `Task with ID ${_id} deleted`
 
     res.json(response);
 });
